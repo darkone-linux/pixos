@@ -6,6 +6,9 @@ A Nix Flake to build a NixOS image for RPI5.
 
 Build works on a NixOS system.
 
+> [!NOTE]
+> Master branch is in french, english is in **rpi5-en** branch.
+
 ```sh
 git clone https://github.com/darkone-linux/pixos.git
 cd pixos
@@ -17,6 +20,8 @@ The RPI5 SD Image is in the `result` link, copy it to a SD Card (for example /de
 ```sh
 zstdcat -v result/sd-image/*.zst > /dev/sda
 ```
+
+Initial passwords are `password` for user `nixos` (sudoer) and `root`.
 
 Boot and run in root:
 

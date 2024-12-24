@@ -1,6 +1,7 @@
 {
   description = "PixOS";
 
+  # Avoid building kernel
   nixConfig = {
     extra-substituters = [ "https://nix-community.cachix.org" ];
     extra-trusted-public-keys = [
@@ -14,12 +15,13 @@
     #nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
 
+    # Pin RPN
     raspberry-pi-nix = {
       url = "github:nix-community/raspberry-pi-nix?ref=v0.4.1";
-      #url = "github:nix-community/raspberry-pi-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Activate HM if needed
     #home-manager = {
     #  url = "github:nix-community/home-manager";
     #  inputs.nixpkgs.follows = "nixpkgs";
@@ -41,6 +43,7 @@
 
   let
 
+    # Image name
     devices = {
       pi = "pixos";
     };

@@ -1,7 +1,12 @@
+# This is the SD image initial configuration
+
 { pkgs, lib, inputs, devices, ... }:
 {
-  boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
+  # Comment this line if you want a recent kernel, but 
+  # if it's not in the community cache the builder will compile it
   boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_rpi4;
+
+  # Initial TimeZone + keyboard
   time.timeZone = "America/Miquelon";
   i18n.defaultLocale = "fr_FR.UTF-8";
   console = {
@@ -9,6 +14,8 @@
     keyMap = lib.mkForce "fr";
     useXkbConfig = true; # use xkb.options in tty.
   };
+
+  # Initial users configuration
   users.users.root.initialPassword = "password";
   users.users.nixos = {
     isNormalUser = true;
@@ -17,6 +24,8 @@
     packages = with pkgs; [];
   };
   security.sudo.wheelNeedsPassword = false;
+
+  # Initial network configuration
   networking = {
     hostName = "pixos";
     useDHCP = false;
@@ -25,30 +34,33 @@
       eth0.useDHCP = true;
     };
   };
+
+  # Some programs
   environment.systemPackages = with pkgs; [
     vim
     wget
     git
     htop
-    #nvd
   ];
+
+  # Experimental features must be activated
   nix.settings = {
     trusted-users = [ "@wheel" ];
     experimental-features = [ "nix-command" "flakes" ];
     keep-outputs = true;
     keep-derivations = true;
   };
+
+  # Access via SSH
   services.openssh.enable = true;
 
-  #system.activationScripts.report-changes = ''
-  #  PATH=$PATH:${lib.makeBinPath [ pkgs.nvd pkgs.nix ]}
-  #  nvd diff $(ls -dv /nix/var/nix/profiles/system-*-link | tail -2)
-  #'';
-
+  # The board and wanted kernel version
   raspberry-pi-nix = {
     board = "bcm2712";
     #kernel-version = "v6_10_12";
   };
+
+  # PI Hardware configuration
   hardware = {
     bluetooth.enable = true;
     raspberry-pi = {
@@ -71,24 +83,21 @@
               enable = true;
             };
 
-            # NVME
-            pciex1 = {
-              enable = true;
-            };
-            pciex1_gen = {
-              enable = true;
-              value = 3;
-            };
-            nvme = {
-              enable = true;
-            };
+            # NVME disk access
+            #pciex1 = {
+            #  enable = true;
+            #};
+            #pciex1_gen = {
+            #  enable = true;
+            #  value = 3;
+            #};
+            #nvme = {
+            #  enable = true;
+            #};
+
           };
           dt-overlays = {
             vc4-kms-v3d-pi5 = {
-              enable = true;
-              params = { };
-            };
-            disable-bt = {
               enable = true;
               params = { };
             };
@@ -118,10 +127,6 @@
               enable = true;
               value = 1;
             };
-#            enable_uart = {
-#              enable = true;
-#              value = 0;
-#            };
             temp_limit = {
               enable = true;
               value = 75;
@@ -135,6 +140,8 @@
       };
     };
   };
+
+  # You can put another features here, for example:
   #security.rtkit.enable = true;
   #services.pipewire = {
   #  enable = true;
@@ -142,5 +149,7 @@
   #  alsa.support32Bit = true;
   #  pulse.enable = true;
   #};
+
+  # DO NOT TOUCH THIS
   system.stateVersion = "24.11";
 }

@@ -7,11 +7,11 @@
   boot.kernelPackages = lib.mkForce pkgs.linuxKernel.packages.linux_rpi4;
 
   # Initial TimeZone + keyboard
-  time.timeZone = "America/Miquelon";
-  i18n.defaultLocale = "fr_FR.UTF-8";
+  time.timeZone = "America/Los_Angeles";
+  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
-    keyMap = lib.mkForce "fr";
+    keyMap = lib.mkForce "en";
     useXkbConfig = true; # use xkb.options in tty.
   };
 
